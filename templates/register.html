@@ -1,0 +1,61 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+
+  <style>
+
+  </style>
+{% endblock %}
+
+
+{% block content %}
+{% include "header.html" %}
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://images.unsplash.com/photo-1531592937781-344ad608fabf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="page-heading">
+            <h1>Register</h1>
+            <span class="subheading">Start Contributing to the Blogs!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    <div class="row ">
+      <div class="col-lg-5 col-md-6 mx-auto">
+
+        <div class="card h-auto ">
+          <div class="card-header text-center">
+            <h2 class="card-title">Sign Up</h2>
+          </div>
+          <div class="card-body">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <ul class=flashes>
+                {% for message , category in messages %}
+                    <li class="{{category}}">{{message}}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
+
+         {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "outline-primary"}) }}
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+{% include "footer.html" %}
+{% endblock %}
