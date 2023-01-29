@@ -12,10 +12,14 @@ from flask_gravatar import Gravatar
 from functools import wraps
 from dotenv import load_dotenv
 import os
+import psycopg2
 
 
 #loading dotenv....
-load_dotenv(".env")
+try:
+    load_dotenv(".env")
+except:
+    pass
 
 
 app = Flask(__name__)
@@ -26,7 +30,7 @@ Bootstrap(app)
 
 ##CONNECT TO DB-------------------------------------------------------
 db = SQLAlchemy()
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('Database_url' , 'sqlite:///blog.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
@@ -121,9 +125,9 @@ class Comment(db.Model , UserMixin):
 
 
 
-# with app.app_context():
-#     db.create_all()
-#
+with app.app_context():
+    db.create_all()
+
 
 
 
@@ -135,7 +139,10 @@ class Comment(db.Model , UserMixin):
 #home route---------------
 @app.route('/')
 def get_all_posts():
-    all_posts = db.session.execute(db.select(BlogPost).order_by(BlogPost.id)).scalars()
+    try :
+        all_posts = db.session.execute(db.select(BlogPost).order_by(BlogPost.id)).scalars()
+    except:
+        all_posts = ""
     return render_template("index.html", admin=is_admin(), all_posts=all_posts)
 
 
